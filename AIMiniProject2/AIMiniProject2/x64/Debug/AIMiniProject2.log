@@ -1,16 +1,26 @@
 ﻿  CFish.cpp
-C:\Users\User\source\repos\AIMiniProject2\AIMiniProject2\CFish.cpp(7,82): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(7,82): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int
           ]
-C:\Users\User\source\repos\AIMiniProject2\AIMiniProject2\CFish.cpp(7,51): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(7,51): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int
           ]
   CFlock.cpp
+  CPlayer.cpp
+C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\CPlayer.cpp(7,97): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\CPlayer.cpp(7,61): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
   main.cpp
   Generating Code...
-  LINK : C:\Users\User\source\repos\AIMiniProject2\x64\Debug\AIMiniProject2.exe not found or not built by the last incremental link; performing full link
-  AIMiniProject2.vcxproj -> C:\Users\User\source\repos\AIMiniProject2\x64\Debug\AIMiniProject2.exe
+  AIMiniProject2.vcxproj -> C:\Users\User\AIMiniProject2\AIMiniProject2\x64\Debug\AIMiniProject2.exe
