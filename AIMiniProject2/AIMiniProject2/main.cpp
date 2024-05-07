@@ -1,4 +1,5 @@
 #include "CPlayer.h"
+#include "CFish.h"
 
 sf::Clock g_Clock;
 float g_DeltaTime = 0.0f;
@@ -13,6 +14,14 @@ int main()
 	// create player
 	CPlayer* Player = new CPlayer("Sprites/PlayerBlock.bmp");
 	Player->SetWindowRef(&window);
+
+	// test fish
+	std::vector<CFish> FishVec;
+	for (int i = 0; i < 20; i++)
+	{
+		CPlayer* Fish = new CPlayer("Sprites/FishBlock.bmp");
+		FishVec.emplace_back(Fish);
+	}
 
 	// main window loop
 	while (window.isOpen())

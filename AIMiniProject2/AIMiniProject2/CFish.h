@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include <random>
 
 class CFish
 {
@@ -15,5 +16,9 @@ protected:
 public:
 	CFish(sf::String _ImagePath);
 	~CFish();
+
+	void Update(float _dt);
+
+	sf::Sprite Draw();
 };
 
