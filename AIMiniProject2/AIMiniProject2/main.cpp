@@ -1,6 +1,7 @@
-#include "CPlayer.h"
-#include "CFish.h"
+//#include "CPlayer.h"
+#include "CFLock.h"
 
+// delta time stuff
 sf::Clock g_Clock;
 float g_DeltaTime = 0.0f;
 bool g_bGameRunning = true;
@@ -16,12 +17,11 @@ int main()
 	Player->SetWindowRef(&window);
 
 	// test fish
-	std::vector<CFish> FishVec;
-	for (int i = 0; i < 20; i++)
-	{
-		CPlayer* Fish = new CPlayer("Sprites/FishBlock.bmp");
-		FishVec.emplace_back(Fish);
-	}
+	//std::vector<CFish> FishVec;
+	//CFish* Fish = new CFish("Sprites/FishBlock.bmp");
+
+	// Flock
+	CFlock* Flock = new CFlock();
 
 	// main window loop
 	while (window.isOpen())
@@ -41,19 +41,27 @@ int main()
 		// make background blue like sky
 		window.clear(sf::Color::Cyan);
 
-        // prevent game running when window moved
-        if (true/*g_DeltaTime < 0.1f*/)
+
+        // input
+        if (g_bGameRunning)
         {
-            // input
-            if (g_bGameRunning)
-            {
-                Player->Input(g_DeltaTime);
-				Player->Update(g_DeltaTime);
-            }
+            Player->Input(g_DeltaTime);
+			Player->Update(g_DeltaTime);
         }
+
+		// update flock
+		Flock->Update(g_DeltaTime, *Player);
 
 		// drawing
 		window.draw(Player->Draw());
+
+		//for (CFish Fish : FishVec)
+		//{
+		//	window.draw(Fish.Draw());
+		//}
+
+		Flock->Draw(&window);
+
 		window.display();
 
 	}

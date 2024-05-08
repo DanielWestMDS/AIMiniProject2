@@ -1,30 +1,45 @@
-﻿  CFish.cpp
-C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(7,82): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+﻿  main.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xmemory(680,47): error C2665: 'CFish::CFish': no overloaded function could convert all the argument types
+C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.h(23,1): message : could be 'CFish::CFish(const CFish &)'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xmemory(680,47): message : 'CFish::CFish(const CFish &)': cannot convert argument 1 from 'CPlayer *' to 'const CFish &'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xmemory(680,68): message : Reason: cannot convert from 'CPlayer *' to 'const CFish'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xmemory(680,68): message : No constructor could take the source type, or constructor overload resolution was ambiguous
+C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.h(17,2): message : or       'CFish::CFish(sf::String)'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xmemory(680,47): message : 'CFish::CFish(sf::String)': cannot convert argument 1 from 'CPlayer *' to 'sf::String'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xmemory(680,68): message : No constructor could take the source type, or constructor overload resolution was ambiguous
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xmemory(680,47): message : while trying to match the argument list '(CPlayer *)'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\vector(852,1): message : see reference to function template instantiation 'void std::_Default_allocator_traits<_Alloc>::construct<_Ty,CPlayer*&>(_Alloc &,_Objty *const ,CPlayer *&)' being compiled
           with
           [
-              T=unsigned int
+              _Alloc=std::allocator<CFish>,
+              _Ty=CFish,
+              _Objty=CFish
           ]
-C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(7,51): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\vector(863,36): message : see reference to function template instantiation 'void std::_Default_allocator_traits<_Alloc>::construct<_Ty,CPlayer*&>(_Alloc &,_Objty *const ,CPlayer *&)' being compiled
           with
           [
-              T=unsigned int
+              _Alloc=std::allocator<CFish>,
+              _Ty=CFish,
+              _Objty=CFish
           ]
-  CFlock.cpp
-  CPlayer.cpp
-C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\CPlayer.cpp(7,97): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\vector(839,1): message : see reference to function template instantiation '_Ty &std::vector<_Ty,std::allocator<_Ty>>::_Emplace_back_with_unused_capacity<CPlayer*&>(CPlayer *&)' being compiled
           with
           [
-              T=unsigned int
+              _Ty=CFish
           ]
-C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\CPlayer.cpp(7,61): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\vector(845,13): message : see reference to function template instantiation '_Ty &std::vector<_Ty,std::allocator<_Ty>>::_Emplace_back_with_unused_capacity<CPlayer*&>(CPlayer *&)' being compiled
           with
           [
-              T=unsigned int
+              _Ty=CFish
           ]
-  main.cpp
-  Generating code
-  29 of 29 functions (100.0%) were compiled.
-    2 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  AIMiniProject2.vcxproj -> C:\Users\User\AIMiniProject2\AIMiniProject2\x64\Release\AIMiniProject2.exe
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\vector(925,1): message : see reference to function template instantiation '_Ty &std::vector<_Ty,std::allocator<_Ty>>::_Emplace_one_at_back<CPlayer*&>(CPlayer *&)' being compiled
+          with
+          [
+              _Ty=CFish
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\vector(927,14): message : see reference to function template instantiation '_Ty &std::vector<_Ty,std::allocator<_Ty>>::_Emplace_one_at_back<CPlayer*&>(CPlayer *&)' being compiled
+          with
+          [
+              _Ty=CFish
+          ]
+C:\Users\User\AIMiniProject2\AIMiniProject2\AIMiniProject2\main.cpp(23,28): message : see reference to function template instantiation 'void std::vector<CFish,std::allocator<CFish>>::emplace_back<CPlayer*&>(CPlayer *&)' being compiled

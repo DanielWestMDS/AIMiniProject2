@@ -6,10 +6,13 @@ class CFlock
 {
 private:
 	// vector containing all members of the flock
-	std::vector<CFish> m_Members;
+	std::vector<CFish*> m_Members;
 
 public:
+	CFlock();
+	~CFlock();
 
-	void Update();
+	void Update(float _dt, CPlayer _Player);
+	void Draw(sf::RenderWindow* _Window);
 };
 

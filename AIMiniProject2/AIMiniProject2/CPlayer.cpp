@@ -47,6 +47,7 @@ void CPlayer::Update(float _dt)
 {
 	// position character based on velocity and speed
 	m_CharacterSprite.move(m_CharacterVelocity.x * m_fCharacterSpeedScalar * _dt, m_CharacterVelocity.y * m_fCharacterSpeedScalar * _dt);
+	m_CharacterPosition = m_CharacterSprite.getPosition();
 }
 
 sf::Sprite CPlayer::Draw()
