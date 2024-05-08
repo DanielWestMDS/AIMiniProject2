@@ -28,6 +28,7 @@ protected:
 
 	sf::Vector2f m_FishPosition;
 	sf::Vector2f m_FishVelocity = { 0, 0 };
+	//sf::Vector2f m_MaxVelocity = { 20.0f, 20.0f };
 	sf::Vector2f m_cVelocity = { 0, 0 };
 	sf::Vector2f steer = { 0, 0 };
 	float m_fAcceleration = 2;
@@ -38,6 +39,7 @@ protected:
 	float m_fSteerForce;
 	float m_fMaxForce;
 	float m_fMaxDistance = 1000;
+	float m_fSlowingRadius = 1000;
 
 	// bools
 	bool m_bSeparation = false;
@@ -48,6 +50,7 @@ protected:
 	sf::Vector2f Normalize(sf::Vector2f _vec);
 	float Magnitude(sf::Vector2f _vec);
 	float Distance(const sf::Vector2f& v1, const sf::Vector2f& v2);
+	sf::Vector2f Truncate(sf::Vector2f _vec, float _max);
 
 	void Seperate(const std::vector<CFish*> m_Members, float deltaTime);
 	sf::Vector2f Cohere(const std::vector<CFish*> _Members);
@@ -57,7 +60,7 @@ protected:
 	// Movement behaviours
 	void Seek(CPlayer _Player, float _dt);
 	void Flee(CPlayer _Player, float _dt);
-	void Arrive();
+	void Arrive(CPlayer _Player);
 	void Evade();
 	void Wander();
 	//sf::Vector2f Seek(sf::Vector2f target, float maxSpeed, float maxForce);

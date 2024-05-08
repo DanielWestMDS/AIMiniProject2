@@ -25,6 +25,18 @@ float CFish::Distance(const sf::Vector2f& v1, const sf::Vector2f& v2)
     return std::sqrt(dx * dx + dy * dy);
 }
 
+sf::Vector2f CFish::Truncate(sf::Vector2f _vec, float _max)
+{
+    if (Magnitude(_vec) > _max)
+    {
+        _vec = Normalize(_vec) * _max;
+        return _vec;
+    }
+
+    return _vec;
+
+}
+
 void CFish::Seperate(const std::vector<CFish*> _Members, float deltaTime)
 {
     sf::Vector2f sum = sf::Vector2f(0.0f, 0.0f);
@@ -216,6 +228,23 @@ void CFish::Flee(CPlayer _Player, float _dt)
     m_FishPosition += m_cVelocity * _dt;
 }
 
+void CFish::Arrive(CPlayer _Player)
+{
+    sf::Vector2f dVelocity = _Player.m_CharacterPosition - m_FishPosition;
+    float fDistance = Magnitude(dVelocity);
+
+    if (fDistance < m_fSlowingRadius)
+    {
+        dVelocity = Normalize(dVelocity) * m_fMaxSpeed * (fDistance / m_fSlowingRadius);
+    }
+    else
+    {
+        dVelocity = Normalize(dVelocity) * m_fMaxSpeed;
+    }
+    steer = dVelocity - m_FishVelocity;
+    m_FishVelocity = Truncate(m_FishVelocity + steer, m_fMaxSpeed);
+}
+
 void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Player)
 {
     Input();
@@ -265,6 +294,7 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
         Flee(_Player, _dt);
         break;
     case ArriveType:
+        Arrive(_Player);
         break;
     case EvadeType:
         break;
