@@ -134,6 +134,22 @@ void CFish::Align()
 
 void CFish::BorderWrap()
 {
+    if (m_FishPosition.x > 800)
+    {
+        m_FishPosition.x = 0;
+    }
+    if (m_FishPosition.x < 0)
+    {
+        m_FishPosition.x = 799;
+    }
+    if (m_FishPosition.y > 800)
+    {
+        m_FishPosition.y = 0;
+    }
+    if (m_FishPosition.y < 0)
+    {
+        m_FishPosition.y = 799;
+    }
 }
 
 CFish::CFish()
@@ -167,8 +183,8 @@ void CFish::Input()
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
     {
-        m_CurrentBehaviour = WanderType;
-        std::cout << "Wander" << std::endl;
+        m_CurrentBehaviour = FlockType;
+        std::cout << "Flock" << std::endl;
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
@@ -198,8 +214,8 @@ void CFish::Input()
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
     {
-        m_CurrentBehaviour = FlockType;
-        std::cout << "Flock" << std::endl;
+        m_CurrentBehaviour = PursuitType;
+        std::cout << "Pursuit" << std::endl;
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
@@ -209,18 +225,18 @@ void CFish::Input()
     }
 }
 
-void CFish::Seek(CPlayer _Player, float _dt)
+void CFish::Seek(sf::Vector2f _PlayerPos, float _dt)
 {
-    sf::Vector2f dVelocity = Normalize(_Player.m_CharacterPosition - m_FishPosition) * m_fFishSpeedScalar;
+    sf::Vector2f dVelocity = Normalize(_PlayerPos - m_FishPosition) * m_fFishSpeedScalar;
     steer = dVelocity - m_cVelocity;
     m_cVelocity += steer * m_fAcceleration * _dt;
     //m_FishVelocity = _Player.m_CharacterPosition - m_FishPosition;
     m_FishPosition += m_cVelocity * _dt;
 }
 
-void CFish::Flee(CPlayer _Player, float _dt)
+void CFish::Flee(sf::Vector2f _PlayerPos, float _dt)
 {
-    sf::Vector2f dVelocity = Normalize(_Player.m_CharacterPosition - m_FishPosition) * m_fFishSpeedScalar;
+    sf::Vector2f dVelocity = Normalize(_PlayerPos - m_FishPosition) * m_fFishSpeedScalar;
     dVelocity = dVelocity * -1.0f;
     steer = dVelocity - m_cVelocity;
     m_cVelocity += steer * m_fAcceleration * _dt;
@@ -228,9 +244,9 @@ void CFish::Flee(CPlayer _Player, float _dt)
     m_FishPosition += m_cVelocity * _dt;
 }
 
-void CFish::Arrive(CPlayer _Player)
+void CFish::Arrive(sf::Vector2f _PlayerPos)
 {
-    sf::Vector2f dVelocity = _Player.m_CharacterPosition - m_FishPosition;
+    sf::Vector2f dVelocity = _PlayerPos - m_FishPosition;
     float fDistance = Magnitude(dVelocity);
 
     if (fDistance < m_fSlowingRadius)
@@ -243,6 +259,36 @@ void CFish::Arrive(CPlayer _Player)
     }
     steer = dVelocity - m_FishVelocity;
     m_FishVelocity = Truncate(m_FishVelocity + steer, m_fMaxSpeed);
+}
+
+void CFish::Evade(CPlayer _Player, float _dt)
+{
+    // prevent teleporting from infinite time to target
+    if (Magnitude(m_FishVelocity) == 0.0f)
+    {
+        Flee(_Player.m_CharacterPosition, _dt);
+    }
+    else
+    {
+        float fTimeToTar = Distance(_Player.m_CharacterPosition, m_FishPosition) / Magnitude(m_FishVelocity);
+        sf::Vector2f predictedPos = _Player.m_CharacterPosition + (_Player.m_CharacterVelocity * fTimeToTar);
+        Flee(predictedPos, _dt);
+    }
+}
+
+void CFish::Pursuit(CPlayer _Player, float _dt)
+{
+    // prevent teleporting from infinite time to target
+    if (Magnitude(m_FishVelocity) == 0.0f)
+    {
+        Seek(_Player.m_CharacterPosition, _dt);
+    }
+    else
+    {
+        float fTimeToTar = Distance(_Player.m_CharacterPosition, m_FishPosition) / Magnitude(m_FishVelocity);
+        sf::Vector2f predictedPos = _Player.m_CharacterPosition + (_Player.m_CharacterVelocity * fTimeToTar);
+        Seek(predictedPos, _dt);
+    }
 }
 
 void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Player)
@@ -285,20 +331,22 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
     case StillType:
         m_fFishSpeedScalar = 0.0f;
         break;
-    case WanderType:
+    case FlockType:
         break;
     case SeekType:
-        Seek(_Player, _dt);
+        Seek(_Player.m_CharacterPosition, _dt);
         break;
     case FleeType:
-        Flee(_Player, _dt);
+        Flee(_Player.m_CharacterPosition, _dt);
         break;
     case ArriveType:
-        Arrive(_Player);
+        Arrive(_Player.m_CharacterPosition);
         break;
     case EvadeType:
+        Evade(_Player, _dt);
         break;
-    case FlockType:
+    case PursuitType:
+        Pursuit(_Player, _dt);
         break;
     case FollowLeaderType:
         break;

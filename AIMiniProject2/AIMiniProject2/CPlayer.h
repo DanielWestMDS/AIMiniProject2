@@ -4,6 +4,9 @@
 
 class CPlayer
 {
+private:
+	void BorderWrap();
+
 public:
 
 	// visual elements

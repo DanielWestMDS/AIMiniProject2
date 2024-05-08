@@ -1,5 +1,25 @@
 #include "CPlayer.h"
 
+void CPlayer::BorderWrap()
+{
+	if (m_CharacterPosition.x > 800)
+	{
+		m_CharacterSprite.setPosition(0, m_CharacterPosition.y);
+	}
+	if (m_CharacterPosition.x < 0)
+	{
+		m_CharacterSprite.setPosition(799, m_CharacterPosition.y);
+	}
+	if (m_CharacterPosition.y > 800)
+	{
+		m_CharacterSprite.setPosition(m_CharacterPosition.x, 0);
+	}
+	if (m_CharacterPosition.y < 0)
+	{
+		m_CharacterSprite.setPosition(m_CharacterPosition.x, 799);
+	}
+}
+
 CPlayer::CPlayer(sf::String _ImagePath)
 {
 	m_CharacterTexture.loadFromFile(_ImagePath);
@@ -48,6 +68,9 @@ void CPlayer::Update(float _dt)
 	// position character based on velocity and speed
 	m_CharacterSprite.move(m_CharacterVelocity.x * m_fCharacterSpeedScalar * _dt, m_CharacterVelocity.y * m_fCharacterSpeedScalar * _dt);
 	m_CharacterPosition = m_CharacterSprite.getPosition();
+
+	// wrap around
+	BorderWrap();
 }
 
 sf::Sprite CPlayer::Draw()

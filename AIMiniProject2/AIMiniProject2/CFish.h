@@ -8,12 +8,12 @@
 // enums for all behaviours
 enum BehaviourType {
 	StillType,
-	WanderType,
+	FlockType,
 	SeekType,
 	FleeType,
 	ArriveType,
 	EvadeType,
-	FlockType,
+	PursuitType,
 	FollowLeaderType,
 };
 
@@ -31,7 +31,7 @@ protected:
 	//sf::Vector2f m_MaxVelocity = { 20.0f, 20.0f };
 	sf::Vector2f m_cVelocity = { 0, 0 };
 	sf::Vector2f steer = { 0, 0 };
-	float m_fAcceleration = 2;
+	float m_fAcceleration = 10.0f;
 	float m_fFishSpeedScalar = 1.0f;
 	float m_fSeparationSpeed;
 	float m_fMaxSpeed;
@@ -58,11 +58,11 @@ protected:
 	void BorderWrap();
 
 	// Movement behaviours
-	void Seek(CPlayer _Player, float _dt);
-	void Flee(CPlayer _Player, float _dt);
-	void Arrive(CPlayer _Player);
-	void Evade();
-	void Wander();
+	void Seek(sf::Vector2f _PlayerPos, float _dt);
+	void Flee(sf::Vector2f _PlayerPos, float _dt);
+	void Arrive(sf::Vector2f _PlayerPos);
+	void Evade(CPlayer _Player, float _dt);
+	void Pursuit(CPlayer _Player, float _dt);
 	//sf::Vector2f Seek(sf::Vector2f target, float maxSpeed, float maxForce);
 
 public:
