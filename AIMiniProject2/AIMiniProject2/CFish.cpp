@@ -56,7 +56,8 @@ void CFish::Seperate(const std::vector<CFish*> _Members, float deltaTime)
             continue;
 
         sf::Vector2f offset = m_FishPosition - other->m_FishPosition;
-        float magnitude = std::sqrt(offset.x * offset.x + offset.y * offset.y);
+        float magnitude = Magnitude(offset);
+        offset = Normalize(offset);
         offset /= magnitude;
 
         sum += offset;
@@ -74,62 +75,69 @@ void CFish::Seperate(const std::vector<CFish*> _Members, float deltaTime)
     m_FishVelocity += steer * m_fSeparationForce * m_fSteerForce * deltaTime;
 }
 
-sf::Vector2f CFish::Cohere(const std::vector<CFish*> _Members)
+void CFish::Cohere(const std::vector<CFish*> _Members, float _dt)
 {
     sf::Vector2f sum = sf::Vector2f(0.0f, 0.0f);
     int iCount = 0;
 
-    // For every character in the system, check if it's a neighbor
+    // for every character in the system, check if it's a neighbor
     for (const CFish* other : _Members) 
     {
-        // skip if comparing to self
-        if (other == this)
+        // skip if comparing to self or neighbours not in range
+        if (other == this || Distance(other->m_FishPosition, m_FishPosition) > m_fMaxDistance)
             continue;
 
-        float fDistance = Distance(m_FishPosition, other->m_FishPosition);
+        sum += other->m_FishPosition;
+        iCount++;
+        //float fDistance = Distance(m_FishPosition, other->m_FishPosition);
 
-        // If the other character is in range
-        if ((fDistance > 0) && (fDistance < m_fMaxDistance))
-        {
-            sum += other->m_FishPosition;  // Add the position
-            iCount++;
-        }
+        //// if the other fish is in range
+        //if ((fDistance > 0) && (fDistance < m_fMaxDistance))
+        //{
+        //    sum += other->m_FishPosition;  // Add the position
+        //    iCount++;
+        //}
     }
-
-    // If there are neighbors, calculate the average position
-    if (iCount > 0) 
-    {
-        sum /= (float)iCount;
-        return sf::Vector2f(0, 0);//Seek(sum, m_fMaxSpeed, m_fMaxForce);  // Steer towards the position
-    }
-    else 
-    {
-        return sf::Vector2f(0, 0);  // Return a null steering force
-    }
+    
+    sum /= (float)iCount;
+    sum = sum - m_FishPosition;
+    sum = Normalize(sum);
+    sum *= m_fCohereSpeed;
+    m_dCohesion = sum;
+    steer = sf::Vector2f(sum.x, sum.y) - m_FishVelocity;
+    m_FishVelocity += steer * m_fCohereForce * m_fSteerForce * _dt;
 }
 
-//sf::Vector2f CFish::Seek(sf::Vector2f target, float maxSpeed, float maxForce)
-//{
-//    sf::Vector2f desired = target - m_FishPosition;  // A vector pointing from the character to the target
-//
-//    // Normalize desired and scale with maxSpeed
-//    Normalize(desired);
-//    desired *= maxSpeed;
-//
-//    // Steering = Desired minus velocity
-//    sf::Vector2f steer = desired - m_FishVelocity;
-//
-//    if (Magnitude(steer) > maxForce) 
-//    { 
-//        Normalize(steer);
-//        steer *= maxForce;
-//    }
-//
-//    return steer;
-//}
-
-void CFish::Align()
+void CFish::Align(const std::vector<CFish*> _Members, float _dt)
 {
+    sf::Vector2f sum = sf::Vector2f(0.0f, 0.0f);
+    int iCount = 0;
+
+    // for every character in the system, check if it's a neighbor
+    for (const CFish* other : _Members)
+    {
+        // skip if comparing to self or neighbours not in range
+        if (other == this || Distance(other->m_FishPosition, m_FishPosition) > m_fMaxDistance)
+            continue;
+
+        sum += other->m_FishVelocity;
+        iCount++;
+        //float fDistance = Distance(m_FishPosition, other->m_FishPosition);
+
+        //// if the other fish is in range
+        //if ((fDistance > 0) && (fDistance < m_fMaxDistance))
+        //{
+        //    sum += other->m_FishPosition;  // Add the position
+        //    iCount++;
+        //}
+    }
+    // divide by length of vector
+    sum /= (float)iCount;
+    sum = Normalize(sum);
+    sum *= m_fAlignSpeed;
+    m_dAlignment = sum;
+    steer = sf::Vector2f(sum.x, sum.y) - m_FishVelocity;
+    m_FishVelocity += steer * m_fAlignForce * m_fSteerForce * _dt;
 }
 
 void CFish::BorderWrap()
@@ -184,6 +192,9 @@ void CFish::Input()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
     {
         m_CurrentBehaviour = FlockType;
+        m_bSeparation = true;
+        m_bCohesion = true;
+        m_bAlignment = true;
         std::cout << "Flock" << std::endl;
     }
 
@@ -300,17 +311,18 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
         m_fFishSpeedScalar = 30.0f;
     }
 
+    // flocking
     if (m_bSeparation)
     {
         Seperate(_Members, _dt);
     }
     if (m_bCohesion)
     {
-        Cohere(_Members);
+        Cohere(_Members, _dt);
     }
     if (m_bAlignment)
     {
-        Align();
+        Align(_Members, _dt);
     }
     if (m_bBorderWrap)
     {

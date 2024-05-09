@@ -38,13 +38,22 @@ protected:
 	float m_fSeparationForce;
 	float m_fSteerForce;
 	float m_fMaxForce;
-	float m_fMaxDistance = 1000;
-	float m_fSlowingRadius = 1000;
+	float m_fMaxDistance = 200.0f;
+	float m_fSlowingRadius = 1000.0f;
+	float m_fCohereSpeed = 4.0f;
+	float m_fCohereForce = 2.0f;
+	float m_fAlignSpeed = 4.0f;
+	float m_fAlignForce = 2.0f;
+
+	// desired cohesion
+	sf::Vector2f m_dCohesion;
+	// desired Alignment
+	sf::Vector2f m_dAlignment;
 
 	// bools
 	bool m_bSeparation = false;
 	bool m_bCohesion = false;
-	bool m_bAlignment;
+	bool m_bAlignment = false;
 	bool m_bBorderWrap;
 
 	sf::Vector2f Normalize(sf::Vector2f _vec);
@@ -53,8 +62,9 @@ protected:
 	sf::Vector2f Truncate(sf::Vector2f _vec, float _max);
 
 	void Seperate(const std::vector<CFish*> m_Members, float deltaTime);
-	sf::Vector2f Cohere(const std::vector<CFish*> _Members);
-	void Align();
+	void Cohere(const std::vector<CFish*> _Members, float _dt);
+	void Align(const std::vector<CFish*> _Members, float _dt);
+
 	void BorderWrap();
 
 	// Movement behaviours
