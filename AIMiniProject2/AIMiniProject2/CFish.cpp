@@ -58,7 +58,11 @@ void CFish::Seperate(const std::vector<CFish*> _Members, float deltaTime)
         sf::Vector2f offset = m_FishPosition - other->m_FishPosition;
         float magnitude = Magnitude(offset);
         offset = Normalize(offset);
-        offset /= magnitude;
+        // prevent offset from becoming NaN
+        if (magnitude != 0)
+        {
+            offset /= magnitude;
+        }
 
         sum += offset;
     }
@@ -244,6 +248,9 @@ void CFish::Input()
     {
         m_CurrentBehaviour = FollowLeaderType;
         std::cout << "FollowLeader" << std::endl;
+        m_bSeparation = true;
+        m_bCohesion = false;
+        m_bAlignment = false;
     }
 }
 
@@ -313,6 +320,14 @@ void CFish::Pursuit(CPlayer _Player, float _dt)
     }
 }
 
+void CFish::FollowLeader(CPlayer _Player, float _dt)
+{
+    float fTimeToTar = Distance(_Player.m_CharacterPosition, m_FishPosition) / Magnitude(m_FishVelocity);
+    sf::Vector2f behindPos = _Player.m_CharacterPosition - (_Player.m_CharacterVelocity * fTimeToTar);
+
+    Arrive(behindPos);
+}
+
 void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Player)
 {
     Input();
@@ -329,11 +344,11 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
     }
     if (m_bCohesion)
     {
-//        Cohere(_Members, _dt);
+        Cohere(_Members, _dt);
     }
     if (m_bAlignment)
     {
-//        Align(_Members, _dt);
+        Align(_Members, _dt);
     }
     if (m_bBorderWrap)
     {
@@ -372,17 +387,19 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
         Pursuit(_Player, _dt);
         break;
     case FollowLeaderType:
+        FollowLeader(_Player, _dt);
         break;
     default:
         break;
     }
 
-    if (m_CurrentBehaviour != FlockType)
+    if (m_CurrentBehaviour != FlockType && m_CurrentBehaviour != FollowLeaderType)
     {
         m_bSeparation = false;
         m_bCohesion = false;
         m_bAlignment = false;
     }
+
     // Update velocity
     //m_FishVelocity += m_fAcceleration * _dt;
 

@@ -35,9 +35,9 @@ protected:
 	float m_fFishSpeedScalar = 1.0f;
 	float m_fSeparationSpeed = 4.0f;
 	float m_fMaxSpeed = 5.0f;
-	float m_fSeparationForce = 2.0f;
+	float m_fSeparationForce = 4.0f;
 	float m_fSteerForce = 0.1f;
-	float m_fMaxForce = 4.0f;
+	float m_fMaxForce = 8.0f;
 	float m_fMaxDistance = 100.0f;
 	float m_fSlowingRadius = 1000.0f;
 	float m_fCohereSpeed = 4.0f;
@@ -73,6 +73,9 @@ protected:
 	void Arrive(sf::Vector2f _PlayerPos);
 	void Evade(CPlayer _Player, float _dt);
 	void Pursuit(CPlayer _Player, float _dt);
+
+	// special movement
+	void FollowLeader(CPlayer _Player, float _dt);
 	//sf::Vector2f Seek(sf::Vector2f target, float maxSpeed, float maxForce);
 
 public:
