@@ -8,4 +8,9 @@ Implemented Behaviours:
 5 - Evade
 6 - Pursuit
 7 - Follow Leader
+8 - Wander
 0 - Stop movement
+
+Arrow keys to move the player
+
+Left click to spawn more fish into the flock

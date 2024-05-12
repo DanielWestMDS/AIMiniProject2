@@ -247,8 +247,8 @@ void CFish::Input()
         m_bSeparation = true;
         m_bCohesion = false;
         m_bAlignment = false;
-        m_fSeparationForce = 4.0f;
-        m_fSeparationSpeed = 4.0f;
+        m_fSeparationForce = 10.0f;
+        m_fSeparationSpeed = 10.0f;
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
@@ -345,7 +345,12 @@ void CFish::Wander(sf::Vector2f _PlayerPos, float _dt)
 void CFish::FollowLeader(CPlayer _Player, float _dt)
 {
     // calculate the predicted time to reach the target based on current velocity
-    float fTimeToTar = Distance(_Player.m_CharacterPosition, m_FishPosition) / Magnitude(m_FishVelocity);
+    float fTimeToTar = 0;
+    // prevent division by 0
+    if (!(m_FishVelocity.x == 0 && m_FishVelocity.y == 0))
+    {
+        fTimeToTar = Distance(_Player.m_CharacterPosition, m_FishPosition) / Magnitude(m_FishVelocity);
+    }
     sf::Vector2f behindPos = _Player.m_CharacterPosition + (_Player.m_CharacterVelocity * fTimeToTar);
 
     // reach destination behind player

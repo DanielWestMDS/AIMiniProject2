@@ -1,1 +1,22 @@
-﻿LINK : fatal error LNK1168: cannot open C:\Users\DaWes\AIMiniProject2\AIMiniProject2\x64\Debug\AIMiniProject2.exe for writing
+﻿  CFish.cpp
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(184,82): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(184,82): warning C4244:         with
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(184,82): warning C4244:         [
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(184,82): warning C4244:             T=unsigned int
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(184,82): warning C4244:         ]
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(184,51): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(184,51): warning C4244:         with
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(184,51): warning C4244:         [
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(184,51): warning C4244:             T=unsigned int
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(184,51): warning C4244:         ]
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(185,54): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(185,54): warning C4244:         with
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(185,54): warning C4244:         [
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(185,54): warning C4244:             T=float
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(185,54): warning C4244:         ]
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(185,39): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(185,39): warning C4244:         with
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(185,39): warning C4244:         [
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(185,39): warning C4244:             T=float
+C:\Users\DaWes\AIMiniProject2\AIMiniProject2\AIMiniProject2\CFish.cpp(185,39): warning C4244:         ]
+LINK : fatal error LNK1168: cannot open C:\Users\DaWes\AIMiniProject2\AIMiniProject2\x64\Debug\AIMiniProject2.exe for writing

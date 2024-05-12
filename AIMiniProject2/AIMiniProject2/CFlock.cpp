@@ -56,4 +56,7 @@ void CFlock::AddFish()
 	CFish* Fish = new CFish("Sprites/FishBlock.bmp");
 	// add fish to flock vector
 	m_Members.push_back(Fish);
+
+	// cout flock count
+	std::cout << "Flock size: " << m_Members.size() << std::endl;
 }
