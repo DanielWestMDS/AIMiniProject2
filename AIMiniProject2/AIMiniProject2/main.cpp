@@ -1,4 +1,15 @@
-//#include "CPlayer.h"
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) Media Design School
+//
+// File Name : main.cpp
+// Description : Contains main window loop for SFML as well as delta time. Creates a player and a flock then runs their update functions every frame.
+// Author : Daniel West
+// Mail : daniel.west@mds.ac.nz
+
 #include "CFLock.h"
 
 // delta time stuff
@@ -45,20 +56,17 @@ int main()
         // input
         if (g_bGameRunning)
         {
+			// get player input
             Player->Input(g_DeltaTime);
 			Player->Update(g_DeltaTime);
-        }
 
-		// update flock
-		Flock->Update(g_DeltaTime, *Player);
+			// update flock
+			Flock->Update(g_DeltaTime, *Player);
+
+        }
 
 		// drawing
 		window.draw(Player->Draw());
-
-		//for (CFish Fish : FishVec)
-		//{
-		//	window.draw(Fish.Draw());
-		//}
 
 		Flock->Draw(&window);
 

@@ -1,3 +1,15 @@
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) Media Design School
+//
+// File Name : CFish.h
+// Description : Header for CFish class. Includes an enum for behaviour type and values for behaviour such as forces and speed. 
+// Author : Daniel West
+// Mail : daniel.west@mds.ac.nz
+
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <random>
@@ -34,15 +46,15 @@ protected:
 	float m_fAcceleration = 10.0f;
 	float m_fFishSpeedScalar = 1.0f;
 	float m_fSeparationSpeed = 4.0f;
-	float m_fMaxSpeed = 5.0f;
+	float m_fMaxSpeed = 8.0f;
 	float m_fSeparationForce = 4.0f;
 	float m_fSteerForce = 0.1f;
 	float m_fMaxForce = 8.0f;
 	float m_fMaxDistance = 100.0f;
 	float m_fSlowingRadius = 1000.0f;
-	float m_fCohereSpeed = 4.0f;
-	float m_fCohereForce = 2.0f;
-	float m_fAlignSpeed = 4.0f;
+	float m_fCohereSpeed = 6.0f;
+	float m_fCohereForce = 2.5f;
+	float m_fAlignSpeed = 6.0f;
 	float m_fAlignForce = 2.0f;
 
 	// desired cohesion
@@ -80,7 +92,7 @@ protected:
 	void Seek(sf::Vector2f _PlayerPos, float _dt);
 	// steer away from the player
 	void Flee(sf::Vector2f _PlayerPos, float _dt);
-	// go to a point and desselerate 
+	// go to a point and decelerate 
 	void Arrive(sf::Vector2f _PlayerPos);
 	// predict player position and avoid it
 	void Evade(CPlayer _Player, float _dt);
@@ -102,8 +114,6 @@ public:
 	~CFish();
 
 	void Input();
-
-
 
 	void Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Player);
 

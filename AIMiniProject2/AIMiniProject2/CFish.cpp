@@ -1,3 +1,15 @@
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) Media Design School
+//
+// File Name : CFish.cpp
+// Description : functionality for CFish class. functions for all fish movement and input for changing fish behaviour.
+// Author : Daniel West
+// Mail : daniel.west@mds.ac.nz
+
 #include "CFish.h"
 
 sf::Vector2f CFish::Normalize(sf::Vector2f _vec)
@@ -134,14 +146,6 @@ void CFish::Align(const std::vector<CFish*> _Members, float _dt)
 
         sum += other->m_FishVelocity;
         iCount++;
-        //float fDistance = Distance(m_FishPosition, other->m_FishPosition);
-
-        //// if the other fish is in range
-        //if ((fDistance > 0) && (fDistance < m_fMaxDistance))
-        //{
-        //    sum += other->m_FishPosition;  // Add the position
-        //    iCount++;
-        //}
     }
     // prevent sum from being NaN
     if (!(sum.x == 0 && sum.y == 0))
@@ -300,6 +304,7 @@ void CFish::Evade(CPlayer _Player, float _dt)
     }
     else
     {
+        // calculate the predicted time to reach the target based on current velocity
         float fTimeToTar = Distance(_Player.m_CharacterPosition, m_FishPosition) / Magnitude(m_FishVelocity);
         sf::Vector2f predictedPos = _Player.m_CharacterPosition + (_Player.m_CharacterVelocity * fTimeToTar);
         Flee(predictedPos, _dt);
@@ -315,17 +320,22 @@ void CFish::Pursuit(CPlayer _Player, float _dt)
     }
     else
     {
+        // calculate the predicted time to reach the target based on current velocity
         float fTimeToTar = Distance(_Player.m_CharacterPosition, m_FishPosition) / Magnitude(m_FishVelocity);
+        // calculate the predicted position of the player based on the player velocity
         sf::Vector2f predictedPos = _Player.m_CharacterPosition + (_Player.m_CharacterVelocity * fTimeToTar);
-        Seek(predictedPos, _dt);
+        //Seek(predictedPos, _dt);
+        Arrive(predictedPos);
     }
 }
 
 void CFish::FollowLeader(CPlayer _Player, float _dt)
 {
+    // calculate the predicted time to reach the target based on current velocity
     float fTimeToTar = Distance(_Player.m_CharacterPosition, m_FishPosition) / Magnitude(m_FishVelocity);
-    sf::Vector2f behindPos = _Player.m_CharacterPosition - (_Player.m_CharacterVelocity * fTimeToTar);
+    sf::Vector2f behindPos = _Player.m_CharacterPosition + (_Player.m_CharacterVelocity * fTimeToTar);
 
+    // reach destination behind player
     Arrive(behindPos);
 }
 

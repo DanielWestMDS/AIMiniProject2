@@ -1,3 +1,15 @@
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) Media Design School
+//
+// File Name : CPlayer.h
+// Description : Header for CPlayer class. Handles everything to do with the controllable player that the flock interacts with. 
+// Author : Daniel West
+// Mail : daniel.west@mds.ac.nz
+
 #include "SFML/Graphics.hpp"
 
 //#include <iostream>
@@ -5,6 +17,7 @@
 class CPlayer
 {
 private:
+	// teleport the player to the other side of the screen if they are about to leave it
 	void BorderWrap();
 
 public:

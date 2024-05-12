@@ -1,3 +1,15 @@
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) Media Design School
+//
+// File Name : CPlayer.cpp
+// Description : Functionality for player. Includes input, render updates, and border wrapping. 
+// Author : Daniel West
+// Mail : daniel.west@mds.ac.nz
+
 #include "CPlayer.h"
 
 void CPlayer::BorderWrap()
