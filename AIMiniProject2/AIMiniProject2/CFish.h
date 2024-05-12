@@ -27,6 +27,7 @@ enum BehaviourType {
 	EvadeType,
 	PursuitType,
 	FollowLeaderType,
+	WanderType,
 };
 
 class CFish
@@ -44,7 +45,7 @@ protected:
 	sf::Vector2f m_cVelocity = { 0, 0 };
 	sf::Vector2f steer = { 0, 0 };
 	float m_fAcceleration = 10.0f;
-	float m_fFishSpeedScalar = 1.0f;
+	float m_fFishSpeedScalar = 0.5f;
 	float m_fSeparationSpeed = 4.0f;
 	float m_fMaxSpeed = 8.0f;
 	float m_fSeparationForce = 4.0f;
@@ -56,6 +57,9 @@ protected:
 	float m_fCohereForce = 2.5f;
 	float m_fAlignSpeed = 6.0f;
 	float m_fAlignForce = 2.0f;
+	float m_fWanderDistance = 10.0f;
+	float m_fWanderRadius = 5.0f;
+	float m_fWanderAngle = 0.0f;
 
 	// desired cohesion
 	sf::Vector2f m_dCohesion;
@@ -98,6 +102,8 @@ protected:
 	void Evade(CPlayer _Player, float _dt);
 	// predict player position and move towards it
 	void Pursuit(CPlayer _Player, float _dt);
+	// natural wander movement
+	void Wander(sf::Vector2f _PlayerPos, float _dt);
 
 	// special movement
 	// 

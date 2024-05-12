@@ -110,14 +110,6 @@ void CFish::Cohere(const std::vector<CFish*> _Members, float _dt)
 
         sum += other->m_FishPosition;
         iCount++;
-        //float fDistance = Distance(m_FishPosition, other->m_FishPosition);
-
-        //// if the other fish is in range
-        //if ((fDistance > 0) && (fDistance < m_fMaxDistance))
-        //{
-        //    sum += other->m_FishPosition;  // Add the position
-        //    iCount++;
-        //}
     }
     
     if (!(sum.x == 0 && sum.y == 0))
@@ -192,9 +184,6 @@ CFish::CFish(sf::String _ImagePath)
 	m_FishSprite.setOrigin(m_FishTexture.getSize().x / 2, m_FishTexture.getSize().y / 2);
 	m_FishPosition = sf::Vector2f(rand() % 1000, rand() % 1000); // maybe make this random
 	m_FishSprite.setPosition(m_FishPosition);
-
-    m_fMaxSpeed = 10.0f;
-    m_fMaxForce = 5.0f;
 }
 
 CFish::~CFish()
@@ -215,6 +204,8 @@ void CFish::Input()
         m_bSeparation = true;
         m_bCohesion = true;
         m_bAlignment = true;
+        m_fSeparationForce = 4.0f;
+        m_fSeparationSpeed = 4.0f;
         std::cout << "Flock" << std::endl;
     }
 
@@ -256,26 +247,34 @@ void CFish::Input()
         m_bSeparation = true;
         m_bCohesion = false;
         m_bAlignment = false;
+        m_fSeparationForce = 4.0f;
+        m_fSeparationSpeed = 4.0f;
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
+    {
+        m_CurrentBehaviour = WanderType;
+        std::cout << "Wander" << std::endl;
     }
 }
 
 void CFish::Seek(sf::Vector2f _PlayerPos, float _dt)
 {
     sf::Vector2f dVelocity = Normalize(_PlayerPos - m_FishPosition) * m_fFishSpeedScalar;
-    steer = dVelocity - m_cVelocity;
-    m_cVelocity += steer * m_fAcceleration * _dt;
+    steer = dVelocity - m_FishVelocity;
+    m_FishVelocity += steer * m_fAcceleration * _dt;
     //m_FishVelocity = _Player.m_CharacterPosition - m_FishPosition;
-    m_FishPosition += m_cVelocity * _dt;
+    m_FishPosition += m_FishVelocity * _dt;
 }
 
 void CFish::Flee(sf::Vector2f _PlayerPos, float _dt)
 {
     sf::Vector2f dVelocity = Normalize(_PlayerPos - m_FishPosition) * m_fFishSpeedScalar;
     dVelocity = dVelocity * -1.0f;
-    steer = dVelocity - m_cVelocity;
-    m_cVelocity += steer * m_fAcceleration * _dt;
+    steer = dVelocity - m_FishVelocity;
+    m_FishVelocity += steer * m_fAcceleration * _dt;
     //m_FishVelocity = _Player.m_CharacterPosition - m_FishPosition;
-    m_FishPosition += m_cVelocity * _dt;
+    m_FishPosition += m_FishVelocity * _dt;
 }
 
 void CFish::Arrive(sf::Vector2f _PlayerPos)
@@ -324,9 +323,23 @@ void CFish::Pursuit(CPlayer _Player, float _dt)
         float fTimeToTar = Distance(_Player.m_CharacterPosition, m_FishPosition) / Magnitude(m_FishVelocity);
         // calculate the predicted position of the player based on the player velocity
         sf::Vector2f predictedPos = _Player.m_CharacterPosition + (_Player.m_CharacterVelocity * fTimeToTar);
-        //Seek(predictedPos, _dt);
-        Arrive(predictedPos);
+        Seek(predictedPos, _dt);
+        //Arrive(predictedPos);
     }
+}
+
+void CFish::Wander(sf::Vector2f _PlayerPos, float _dt)
+{
+    // find the circle centre
+    sf::Vector2f circleCentre = Normalize(m_FishVelocity) * m_fWanderDistance;
+    // calculate displacement force 
+    circleCentre;
+
+    //sf::Vector2f dVelocity = Normalize(_PlayerPos - m_FishPosition) * m_fFishSpeedScalar;
+    //steer = dVelocity - m_cVelocity;
+    //m_cVelocity += steer * m_fAcceleration * _dt;
+    ////m_FishVelocity = _Player.m_CharacterPosition - m_FishPosition;
+    //m_FishPosition += m_cVelocity * _dt;
 }
 
 void CFish::FollowLeader(CPlayer _Player, float _dt)
@@ -346,24 +359,6 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
     if (m_CurrentBehaviour != StillType)
     {
         m_fFishSpeedScalar = 30.0f;
-    }
-
-    // flocking
-    if (m_bSeparation)
-    {
-        Seperate(_Members, _dt);
-    }
-    if (m_bCohesion)
-    {
-        Cohere(_Members, _dt);
-    }
-    if (m_bAlignment)
-    {
-        Align(_Members, _dt);
-    }
-    if (m_bBorderWrap)
-    {
-        BorderWrap();
     }
 
     // movement
@@ -400,15 +395,37 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
     case FollowLeaderType:
         FollowLeader(_Player, _dt);
         break;
+    case WanderType:
+        Wander(_Player.m_CharacterPosition, _dt);
+        break;
     default:
         break;
     }
 
+    // turn off flocking behaviour for other movement (follow leader excluded)
     if (m_CurrentBehaviour != FlockType && m_CurrentBehaviour != FollowLeaderType)
     {
         m_bSeparation = false;
         m_bCohesion = false;
         m_bAlignment = false;
+    }
+
+    // flocking
+    if (m_bSeparation)
+    {
+        Seperate(_Members, _dt);
+    }
+    if (m_bCohesion)
+    {
+        Cohere(_Members, _dt);
+    }
+    if (m_bAlignment)
+    {
+        Align(_Members, _dt);
+    }
+    if (m_bBorderWrap)
+    {
+        BorderWrap();
     }
 
     // Update velocity
