@@ -63,16 +63,20 @@ void CFish::Seperate(const std::vector<CFish*> _Members, float deltaTime)
         sum += offset;
     }
 
-    if (!_Members.empty())
+    // prevent sum from becoming NaN
+    if (!(sum.x == 0 && sum.y == 0))
     {
-        sum /= static_cast<float>(_Members.size() - 1);
+        if (!_Members.empty())
+        {
+            sum /= static_cast<float>(_Members.size() - 1);
+        }
+
+        sum = sum / std::sqrt(sum.x * sum.x + sum.y * sum.y);
+        sum *= m_fSeparationSpeed;
+
+        sf::Vector2f steer = sf::Vector2f(sum.x, sum.y) - m_FishVelocity;
+        m_FishVelocity += steer * m_fSeparationForce * m_fSteerForce * deltaTime;
     }
-
-    sum = sum / std::sqrt(sum.x * sum.x + sum.y * sum.y);
-    sum *= m_fSeparationSpeed;
-
-    sf::Vector2f steer = sf::Vector2f(sum.x, sum.y) - m_FishVelocity;
-    m_FishVelocity += steer * m_fSeparationForce * m_fSteerForce * deltaTime;
 }
 
 void CFish::Cohere(const std::vector<CFish*> _Members, float _dt)
@@ -99,13 +103,16 @@ void CFish::Cohere(const std::vector<CFish*> _Members, float _dt)
         //}
     }
     
-    sum /= (float)iCount;
-    sum = sum - m_FishPosition;
-    sum = Normalize(sum);
-    sum *= m_fCohereSpeed;
-    m_dCohesion = sum;
-    steer = sf::Vector2f(sum.x, sum.y) - m_FishVelocity;
-    m_FishVelocity += steer * m_fCohereForce * m_fSteerForce * _dt;
+    if (!(sum.x == 0 && sum.y == 0))
+    {
+        sum /= (float)iCount;
+        sum = sum - m_FishPosition;
+        sum = Normalize(sum);
+        sum *= m_fCohereSpeed;
+        m_dCohesion = sum;
+        steer = sf::Vector2f(sum.x, sum.y) - m_FishVelocity;
+        m_FishVelocity += steer * m_fCohereForce * m_fSteerForce * _dt;
+    }
 }
 
 void CFish::Align(const std::vector<CFish*> _Members, float _dt)
@@ -131,13 +138,17 @@ void CFish::Align(const std::vector<CFish*> _Members, float _dt)
         //    iCount++;
         //}
     }
-    // divide by length of vector
-    sum /= (float)iCount;
-    sum = Normalize(sum);
-    sum *= m_fAlignSpeed;
-    m_dAlignment = sum;
-    steer = sf::Vector2f(sum.x, sum.y) - m_FishVelocity;
-    m_FishVelocity += steer * m_fAlignForce * m_fSteerForce * _dt;
+    // prevent sum from being NaN
+    if (!(sum.x == 0 && sum.y == 0))
+    {
+        // divide by length of vector
+        sum /= (float)iCount;
+        sum = Normalize(sum);
+        sum *= m_fAlignSpeed;
+        m_dAlignment = sum;
+        steer = sf::Vector2f(sum.x, sum.y) - m_FishVelocity;
+        m_FishVelocity += steer * m_fAlignForce * m_fSteerForce * _dt;
+    }
 }
 
 void CFish::BorderWrap()
@@ -318,11 +329,11 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
     }
     if (m_bCohesion)
     {
-        Cohere(_Members, _dt);
+//        Cohere(_Members, _dt);
     }
     if (m_bAlignment)
     {
-        Align(_Members, _dt);
+//        Align(_Members, _dt);
     }
     if (m_bBorderWrap)
     {
@@ -366,6 +377,12 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
         break;
     }
 
+    if (m_CurrentBehaviour != FlockType)
+    {
+        m_bSeparation = false;
+        m_bCohesion = false;
+        m_bAlignment = false;
+    }
     // Update velocity
     //m_FishVelocity += m_fAcceleration * _dt;
 

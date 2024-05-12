@@ -33,12 +33,12 @@ protected:
 	sf::Vector2f steer = { 0, 0 };
 	float m_fAcceleration = 10.0f;
 	float m_fFishSpeedScalar = 1.0f;
-	float m_fSeparationSpeed;
-	float m_fMaxSpeed;
-	float m_fSeparationForce;
-	float m_fSteerForce;
-	float m_fMaxForce;
-	float m_fMaxDistance = 200.0f;
+	float m_fSeparationSpeed = 4.0f;
+	float m_fMaxSpeed = 5.0f;
+	float m_fSeparationForce = 2.0f;
+	float m_fSteerForce = 0.1f;
+	float m_fMaxForce = 4.0f;
+	float m_fMaxDistance = 100.0f;
 	float m_fSlowingRadius = 1000.0f;
 	float m_fCohereSpeed = 4.0f;
 	float m_fCohereForce = 2.0f;
@@ -54,7 +54,7 @@ protected:
 	bool m_bSeparation = false;
 	bool m_bCohesion = false;
 	bool m_bAlignment = false;
-	bool m_bBorderWrap;
+	bool m_bBorderWrap = true;
 
 	sf::Vector2f Normalize(sf::Vector2f _vec);
 	float Magnitude(sf::Vector2f _vec);
