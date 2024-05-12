@@ -56,22 +56,35 @@ protected:
 	bool m_bAlignment = false;
 	bool m_bBorderWrap = true;
 
+	// normalize a vector
 	sf::Vector2f Normalize(sf::Vector2f _vec);
+	// find the absolute value of a vector
 	float Magnitude(sf::Vector2f _vec);
+	// find the distance between two coordinates
 	float Distance(const sf::Vector2f& v1, const sf::Vector2f& v2);
+	// normalise a vector if it's bigger than a value
 	sf::Vector2f Truncate(sf::Vector2f _vec, float _max);
 
+	// avoid fish in radius
 	void Seperate(const std::vector<CFish*> m_Members, float deltaTime);
+	// stay close to fish in radius
 	void Cohere(const std::vector<CFish*> _Members, float _dt);
+	// align with fish in radius
 	void Align(const std::vector<CFish*> _Members, float _dt);
 
+	// wrap around the screen
 	void BorderWrap();
 
 	// Movement behaviours
+	// Steer towards the player
 	void Seek(sf::Vector2f _PlayerPos, float _dt);
+	// steer away from the player
 	void Flee(sf::Vector2f _PlayerPos, float _dt);
+	// go to a point and desselerate 
 	void Arrive(sf::Vector2f _PlayerPos);
+	// predict player position and avoid it
 	void Evade(CPlayer _Player, float _dt);
+	// predict player position and move towards it
 	void Pursuit(CPlayer _Player, float _dt);
 
 	// special movement
