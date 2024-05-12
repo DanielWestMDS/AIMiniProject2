@@ -2,9 +2,10 @@
 
 sf::Vector2f CFish::Normalize(sf::Vector2f _vec)
 {
+    // absolute value/magnitude
     float length = std::sqrt(_vec.x * _vec.x + _vec.y * _vec.y);
 
-    // To avoid division by zero, we only normalize if the length is not zero
+    // avoid division by zero, only normalize if length is not zero
     if (length > 0) {
         _vec.x /= length;
         _vec.y /= length;

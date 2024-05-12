@@ -88,6 +88,7 @@ protected:
 	void Pursuit(CPlayer _Player, float _dt);
 
 	// special movement
+	// 
 	void FollowLeader(CPlayer _Player, float _dt);
 	//sf::Vector2f Seek(sf::Vector2f target, float maxSpeed, float maxForce);
 
