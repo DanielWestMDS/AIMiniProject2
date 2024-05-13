@@ -45,7 +45,7 @@ protected:
 	sf::Vector2f m_cVelocity = { 0, 0 };
 	sf::Vector2f steer = { 0, 0 };
 	float m_fAcceleration = 10.0f;
-	float m_fFishSpeedScalar = 0.5f;
+	float m_fFishSpeedScalar = 0.0f;
 	float m_fSeparationSpeed = 4.0f;
 	float m_fMaxSpeed = 8.0f;
 	float m_fSeparationForce = 4.0f;

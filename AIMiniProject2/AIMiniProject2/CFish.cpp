@@ -333,13 +333,12 @@ void CFish::Wander(sf::Vector2f _PlayerPos, float _dt)
     // find the circle centre
     sf::Vector2f circleCentre = Normalize(m_FishVelocity) * m_fWanderDistance;
     // calculate displacement force 
-    circleCentre;
+    float WanderAngle = rand() % 360;
+    sf::Vector2f displacementForce = sf::Vector2f(0.0f, -1.0f);
+    displacementForce = displacementForce * m_fWanderRadius;
+    displacementForce = sf::Vector2f(Magnitude(displacementForce) * std::cos(WanderAngle), Magnitude(displacementForce) * std::sin(WanderAngle));
 
-    //sf::Vector2f dVelocity = Normalize(_PlayerPos - m_FishPosition) * m_fFishSpeedScalar;
-    //steer = dVelocity - m_cVelocity;
-    //m_cVelocity += steer * m_fAcceleration * _dt;
-    ////m_FishVelocity = _Player.m_CharacterPosition - m_FishPosition;
-    //m_FishPosition += m_cVelocity * _dt;
+    m_FishVelocity += displacementForce;
 }
 
 void CFish::FollowLeader(CPlayer _Player, float _dt)
@@ -363,7 +362,7 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
 
     if (m_CurrentBehaviour != StillType)
     {
-        m_fFishSpeedScalar = 30.0f;
+        m_fFishSpeedScalar = 10.0f;
     }
 
     // movement
