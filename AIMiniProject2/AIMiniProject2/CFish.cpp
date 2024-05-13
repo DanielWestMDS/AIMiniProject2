@@ -63,8 +63,10 @@ void CFish::Seperate(const std::vector<CFish*> _Members, float deltaTime)
         //    std::pow(other->m_FishPosition.x - m_FishPosition.x, 2) +
         //    std::pow(other->m_FishPosition.y - m_FishPosition.y, 2));
 
+        // distance between self and neighbour
         float fDistance = Distance(other->m_FishPosition, m_FishPosition);
 
+        // ignore neighbours not in range
         if (fDistance > m_fMaxDistance)
             continue;
 
@@ -112,9 +114,14 @@ void CFish::Cohere(const std::vector<CFish*> _Members, float _dt)
         iCount++;
     }
     
+    // prevent divide by 0
     if (!(sum.x == 0 && sum.y == 0))
     {
-        sum /= (float)iCount;
+        // prevent divide by 0
+        if (iCount != 0)
+        {
+            sum /= (float)iCount;
+        }
         sum = sum - m_FishPosition;
         sum = Normalize(sum);
         sum *= m_fCohereSpeed;
@@ -143,7 +150,10 @@ void CFish::Align(const std::vector<CFish*> _Members, float _dt)
     if (!(sum.x == 0 && sum.y == 0))
     {
         // divide by length of vector
-        sum /= (float)iCount;
+        if (iCount != 0)
+        {
+            sum /= (float)iCount;
+        }
         sum = Normalize(sum);
         sum *= m_fAlignSpeed;
         m_dAlignment = sum;
@@ -178,11 +188,13 @@ CFish::CFish()
 
 CFish::CFish(sf::String _ImagePath)
 {
-    // add sprite
+    // add texture
 	m_FishTexture.loadFromFile(_ImagePath);
+    // link sprite to texture
 	m_FishSprite.setTexture(m_FishTexture);
 	m_FishSprite.setOrigin(m_FishTexture.getSize().x / 2, m_FishTexture.getSize().y / 2);
-	m_FishPosition = sf::Vector2f(rand() % 1000, rand() % 1000); // maybe make this random
+    // set the fish to a random position on screen 
+	m_FishPosition = sf::Vector2f(rand() % 800, rand() % 800);
 	m_FishSprite.setPosition(m_FishPosition);
 }
 
@@ -192,12 +204,14 @@ CFish::~CFish()
 
 void CFish::Input()
 {
+    // stop movement if 0 pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
     {
         m_CurrentBehaviour = StillType;
         std::cout << "Still" << std::endl;
     }
 
+    // flock if 1 pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
     {
         m_CurrentBehaviour = FlockType;
@@ -208,13 +222,15 @@ void CFish::Input()
         m_fSeparationSpeed = 4.0f;
         std::cout << "Flock" << std::endl;
     }
-
+    
+    // Seek if 2 pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
     {
         m_CurrentBehaviour = SeekType;
         std::cout << "Seek" << std::endl;
     }
 
+    // flee if 3 pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
     {
         m_CurrentBehaviour = FleeType;
@@ -228,18 +244,21 @@ void CFish::Input()
         std::cout << "Arrive" << std::endl;
     }
 
+    // evade if 4 pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
     {
         m_CurrentBehaviour = EvadeType;
         std::cout << "Evade" << std::endl;
     }
 
+    // pursue if 5 pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
     {
         m_CurrentBehaviour = PursuitType;
         std::cout << "Pursuit" << std::endl;
     }
 
+    // follow leader if 7 pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
     {
         m_CurrentBehaviour = FollowLeaderType;
@@ -251,6 +270,7 @@ void CFish::Input()
         m_fSeparationSpeed = 10.0f;
     }
 
+    // wander if 8 pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
     {
         m_CurrentBehaviour = WanderType;
@@ -279,9 +299,11 @@ void CFish::Flee(sf::Vector2f _PlayerPos, float _dt)
 
 void CFish::Arrive(sf::Vector2f _PlayerPos)
 {
+    // desired velocity
     sf::Vector2f dVelocity = _PlayerPos - m_FishPosition;
     float fDistance = Magnitude(dVelocity);
 
+    // slow down if getting within radius
     if (fDistance < m_fSlowingRadius)
     {
         dVelocity = Normalize(dVelocity) * m_fMaxSpeed * (fDistance / m_fSlowingRadius);
@@ -337,8 +359,8 @@ void CFish::Wander(sf::Vector2f _PlayerPos, float _dt)
     sf::Vector2f displacementForce = sf::Vector2f(0.0f, -1.0f);
     displacementForce = displacementForce * m_fWanderRadius;
     displacementForce = sf::Vector2f(Magnitude(displacementForce) * std::cos(WanderAngle), Magnitude(displacementForce) * std::sin(WanderAngle));
-
-    m_FishVelocity += displacementForce;
+    // combine displacement and circle centre
+    m_FishVelocity += (displacementForce + circleCentre) * _dt;
 }
 
 void CFish::FollowLeader(CPlayer _Player, float _dt)
@@ -414,7 +436,7 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
         m_bAlignment = false;
     }
 
-    // flocking
+    // flocking behaviours
     if (m_bSeparation)
     {
         Seperate(_Members, _dt);
@@ -431,25 +453,6 @@ void CFish::Update(float _dt, const std::vector<CFish*> _Members, CPlayer _Playe
     {
         BorderWrap();
     }
-
-    // Update velocity
-    //m_FishVelocity += m_fAcceleration * _dt;
-
-
-    //// Limit speed
-    //if (Magnitude(m_FishVelocity) > m_fMaxSpeed) 
-    //{
-    //    m_FishVelocity = Normalize(m_FishVelocity) * m_fMaxSpeed;
-    //}
-
-    //// Update position
-    //m_FishPosition += m_FishVelocity * _dt;
-
-    //// Reset acceleration to 0 each cycle
-    //m_fAcceleration = sf::Vector2f(0, 0);
-
-    //m_FishSprite.setPosition(m_FishPosition);
-
 }
 
 sf::Sprite CFish::Draw()

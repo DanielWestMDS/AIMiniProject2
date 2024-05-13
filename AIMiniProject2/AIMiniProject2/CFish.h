@@ -37,13 +37,17 @@ protected:
 	sf::Sprite m_FishSprite;
 	sf::Texture m_FishTexture;
 
+	// enum for behaviours
 	BehaviourType m_CurrentBehaviour;
 
+	// movement vectors
 	sf::Vector2f m_FishPosition;
 	sf::Vector2f m_FishVelocity = { 0, 0 };
 	//sf::Vector2f m_MaxVelocity = { 20.0f, 20.0f };
 	sf::Vector2f m_cVelocity = { 0, 0 };
 	sf::Vector2f steer = { 0, 0 };
+
+	// float values
 	float m_fAcceleration = 10.0f;
 	float m_fFishSpeedScalar = 0.0f;
 	float m_fSeparationSpeed = 4.0f;

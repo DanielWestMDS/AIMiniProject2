@@ -32,12 +32,13 @@ void CFlock::Update(float _dt, CPlayer _Player)
 {
 	for (CFish* Fish : m_Members)
 	{
-		// flocking code here
+		// update individual member of flock
 		Fish->Update(_dt, m_Members, _Player);
 	}
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
+		// add a fish to the flock if mouse button pressed
 		AddFish();
 	}
 }

@@ -39,10 +39,12 @@ public:
 	CPlayer(sf::String _ImagePath);
 	~CPlayer();
 
+	// movement input
 	void Input(float _dt);
 	void SetWindowRef(sf::RenderWindow* _Window) { m_WindowRef = _Window; }
 	void SetPosition(sf::Vector2f _Pos) { m_CharacterSprite.setPosition(_Pos); m_CharacterPosition = _Pos; }
 
+	// update character position based on velocity and speed and apply border wrap
 	void Update(float _dt);
 
 	sf::Sprite Draw();

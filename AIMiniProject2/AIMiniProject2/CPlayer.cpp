@@ -34,10 +34,15 @@ void CPlayer::BorderWrap()
 
 CPlayer::CPlayer(sf::String _ImagePath)
 {
+	// get textture
 	m_CharacterTexture.loadFromFile(_ImagePath);
+	// set sprite texture
 	m_CharacterSprite.setTexture(m_CharacterTexture);
+	// set sprite origin
 	m_CharacterSprite.setOrigin(m_CharacterTexture.getSize().x / 2, m_CharacterTexture.getSize().y / 2);
+	// set character starting position
 	m_CharacterPosition = sf::Vector2f(400, 300);
+	// link sprite position to character position
 	m_CharacterSprite.setPosition(m_CharacterPosition);
 }
 
